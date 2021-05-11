@@ -5,7 +5,8 @@
 - NIfTI (.nii) - **Neuroimaging** Informatics Technology Initiative
 
 ## Libraries
-- **SimpleITK** - Open Source Insight Segmentation and Registration Toolkit
+- [**SimpleITK**](https://github.com/SimpleITK/SimpleITK) - Open Source Insight Segmentation and Registration Toolkit
+- [Pydicom](https://github.com/pydicom/pydicom) - Python package for working with DICOM files 
 - OpenCV - Open Source Computer Vision Library
 - NumPy
 
@@ -20,6 +21,10 @@ python rotation/rotateimage.py 'INPUT DIRECTORY' 'OUTPUT DIRECTORY' ROTATION ANG
 
 ### 2. DICOM to NIfTI
 ```python
-pip install dic2nii
+pip install dcm2nii
 dcm2nii 'DICOM DIRECTORY'
 ```
+
+### 3. Display Dicom Format
+[display/display_dicom.ipynb](https://github.com/)
+Run Jupyter Notebook and Change 'folder_path'
