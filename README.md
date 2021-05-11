@@ -28,3 +28,12 @@ dcm2nii 'DICOM DIRECTORY'
 ### 3. Display Dicom Format
 here : [display/display_dicom.ipynb](https://github.com/Dodant/neuroimaging-with-python/blob/main/display/display_dicom.ipynb)   
 Run Jupyter Notebook and Change 'folder_path'
+
+
+   
+   
+   
+## ETC
+- [Download](http://nist.mni.mcgill.ca/?page_id=714) Brain Templates and Atlases Here (MNI Space)
+- [Download](https://www.microdicom.com/downloads.html) DICOM Viewer (MicroDicom)  
+- NIfTI Viewer : https://socr.umich.edu/HTML5/BrainViewer/
