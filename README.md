@@ -12,28 +12,35 @@
 
 ## Feature
 ### 1. Rotate DICOM Format
+here : [rotation/rotateimage.py](https://github.com/Dodant/neuroimaging-with-python/blob/main/rotation/rotateimage.py)   
 Rotation Angle
 - Positive value - anti-clockwise   
 - Negative value - clockwise   
-```python
-python rotation/rotateimage.py 'INPUT DIRECTORY' 'OUTPUT DIRECTORY' ROTATION ANGLE
-```
-
-### 2. DICOM to NIfTI
-```python
-pip install dcm2nii
-dcm2nii 'DICOM DIRECTORY'
-```
-
-### 3. Display Dicom Format
+```shell
+python rotation/rotateimage.py 'INPUT DIRECTORY' 'OUTPUT DIRECTORY' ROTATION-ANGLE
+```   
+### 2. Display Dicom Format
 here : [display/display_dicom.ipynb](https://github.com/Dodant/neuroimaging-with-python/blob/main/display/display_dicom.ipynb)   
-Run Jupyter Notebook and Change 'folder_path'
+Run Jupyter Notebook and Change 'folder_path'   
+### 3. Image Registration
+here : [image_registration/image_registration.ipynb](https://github.com/Dodant/neuroimaging-with-python/blob/main/image_registration/image_registration.ipynb)   
+**Input**
+- Fixed Image (.nii, .mha, ...)
+- Moving Image   
+
+**Output**
+- Moved Image
+- Transformation File (.tfm)   
 
 
-   
-   
-   
+
+
 ## ETC
 - [Download](http://nist.mni.mcgill.ca/?page_id=714) Brain Templates and Atlases Here (MNI Space)
 - [Download](https://www.microdicom.com/downloads.html) DICOM Viewer (MicroDicom)  
 - NIfTI Viewer : https://socr.umich.edu/HTML5/BrainViewer/
+- DICOM to NIfTI
+  ```shell
+  pip install dcm2nii
+  dcm2nii 'DICOM DIRECTORY'
+  ```
