@@ -4,7 +4,7 @@
 - DICOM (.dcm) - Digital Imaging and Communications in Medicine
 - NIfTI (.nii) - **Neuroimaging** Informatics Technology Initiative
 
-## Library
+## Requirements
 - [**SimpleITK**](https://github.com/SimpleITK/SimpleITK) - Open Source Insight Segmentation and Registration Toolkit
 - [Pydicom](https://github.com/pydicom/pydicom) - Python package for working with DICOM files 
 - OpenCV - Open Source Computer Vision Library
@@ -31,6 +31,14 @@ here : [image_registration/image_registration.ipynb](https://github.com/Dodant/n
 **Output**
 - Moved Image
 - Transformation File (.tfm)   
+
+
+
+## References
+- [InsightSoftwareConsortium/SimpleITK-Notebooks](https://github.com/InsightSoftwareConsortium/SimpleITK-Notebooks)
+- [SuperElastix/SimpleElastix](https://github.com/SuperElastix/SimpleElastix)
+- [voxelmorph/voxelmorph](https://github.com/voxelmorph/voxelmorph)
+- [iitzco/deepbrain](https://github.com/iitzco/deepbrain)
 
 
 
