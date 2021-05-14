@@ -21,6 +21,11 @@ python rotation/rotateimage.py 'INPUT DIRECTORY' 'OUTPUT DIRECTORY' ROTATION-ANG
 ### 2. Display Dicom Format
 here : [display/display_dicom.ipynb](https://github.com/Dodant/neuroimaging-with-python/blob/main/display/display_dicom.ipynb)   
 Run Jupyter Notebook and Change 'folder_path'   
+or
+```shell
+python display/display_dicom.py 'DICOM FOLDER PATH'
+```
+
 ### 3. Image Registration
 here : [image_registration/image_registration.ipynb](https://github.com/Dodant/neuroimaging-with-python/blob/main/image_registration/image_registration.ipynb)   
 **Input** - Fixed Image & Moving Image (.nii, .mha, ...)   
