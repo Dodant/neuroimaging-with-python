@@ -14,9 +14,7 @@
 ## Feature
 ### 1. Rotate DICOM Format
 here : [rotation/rotateimage.py](https://github.com/Dodant/neuroimaging-with-python/blob/main/rotation/rotateimage.py)   
-Rotation Angle
-- Positive value - anti-clockwise   
-- Negative value - clockwise   
+Rotation Angle - Positive(+) value - ACW / Negative(-) value - CW   
 ```shell
 python rotation/rotateimage.py 'INPUT DIRECTORY' 'OUTPUT DIRECTORY' ROTATION-ANGLE
 ```   
@@ -25,15 +23,16 @@ here : [display/display_dicom.ipynb](https://github.com/Dodant/neuroimaging-with
 Run Jupyter Notebook and Change 'folder_path'   
 ### 3. Image Registration
 here : [image_registration/image_registration.ipynb](https://github.com/Dodant/neuroimaging-with-python/blob/main/image_registration/image_registration.ipynb)   
-**Input**
-- Fixed Image (.nii, .mha, ...)
-- Moving Image   
-
-**Output**
-- Moved Image
-- Transformation File (.tfm)   
+**Input** - Fixed Image & Moving Image (.nii, .mha, ...)   
+**Output** - Moved Image & Transformation File (.tfm)   
 ### 4. Smoothing
-
+here : [smoothing/smoothing.ipynb](https://github.com/Dodant/neuroimaging-with-python/blob/main/smoothing/smoothing.ipynb)   
+**Input** - NIfTI Image (.nii)   
+**Output** - Smoothed Image (.nii)   
+or
+```shell
+python smoothing/smoothing.py 'INPUT NIfTI' 'OUTPUT NIfTI' SIGMA
+```   
 
 
 ## References
