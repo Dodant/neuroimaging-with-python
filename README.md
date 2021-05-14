@@ -25,13 +25,17 @@ Run Jupyter Notebook and Change 'folder_path'
 here : [image_registration/image_registration.ipynb](https://github.com/Dodant/neuroimaging-with-python/blob/main/image_registration/image_registration.ipynb)   
 **Input** - Fixed Image & Moving Image (.nii, .mha, ...)   
 **Output** - Moved Image & Transformation File (.tfm)   
+or
+```shell
+python image_registration/image_registration.py 'FIXED IMAGE' 'MOVING IMAGE' LearningRate(optional)
+```
 ### 4. Smoothing
 here : [smoothing/smoothing.ipynb](https://github.com/Dodant/neuroimaging-with-python/blob/main/smoothing/smoothing.ipynb)   
 **Input** - NIfTI Image (.nii)   
 **Output** - Smoothed Image (.nii)   
 or
 ```shell
-python smoothing/smoothing.py 'INPUT NIfTI' 'OUTPUT NIfTI' SIGMA
+python smoothing/smoothing.py 'INPUT NIfTI' 'OUTPUT NIfTI' SIGMA(optional)
 ```   
 
 
