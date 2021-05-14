@@ -7,6 +7,7 @@
 ## Requirements
 - [**SimpleITK**](https://github.com/SimpleITK/SimpleITK) - Open Source Insight Segmentation and Registration Toolkit
 - [Pydicom](https://github.com/pydicom/pydicom) - Python package for working with DICOM files 
+- [Nibabel](https://nipy.org/nibabel/#) - Successor of PyNIfTI
 - OpenCV - Open Source Computer Vision Library
 - NumPy
 
@@ -31,6 +32,7 @@ here : [image_registration/image_registration.ipynb](https://github.com/Dodant/n
 **Output**
 - Moved Image
 - Transformation File (.tfm)   
+### 4. Smoothing
 
 
 
@@ -44,8 +46,8 @@ here : [image_registration/image_registration.ipynb](https://github.com/Dodant/n
 
 
 ## ETC
-- [Download](http://nist.mni.mcgill.ca/?page_id=714) Brain Templates and Atlases Here (MNI Space)
-- [Download](https://www.microdicom.com/downloads.html) DICOM Viewer (MicroDicom)  
+- [Download](http://nist.mni.mcgill.ca/?page_id=714) Brain Templates and Atlases here (MNI Space)
+- [Download](https://www.microdicom.com/downloads.html) DICOM Viewer here (MicroDicom)  
 - NIfTI Viewer : https://socr.umich.edu/HTML5/BrainViewer/
 - DICOM to NIfTI
   ```shell
