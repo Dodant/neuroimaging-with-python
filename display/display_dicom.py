@@ -15,6 +15,8 @@ def display_dicom():
     n_cols = 8
     n_rows = (len(X) // n_cols + 1)
 
+    plt.title(folder_path[folder_path.rfind('\\')+1:])
+    plt.axis("off")  
     for idx in range(0, len(X)):
         window.add_subplot(n_rows, n_cols, idx + 1)
         plt.axis("off")
