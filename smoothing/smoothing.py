@@ -10,10 +10,10 @@ def SmoothingImage(sigma=3):
     
 if __name__ == "__main__": 
     try: 
-        if len(sys.argv) == 3:
+        if len(sys.argv) == 2:
             input_img = sys.argv[1]
             SmoothingImage()
-        elif len(sys.argv) == 4:
+        elif len(sys.argv) == 3:
             input_img = sys.argv[1]
             sigma = int(sys.argv[2])
             SmoothingImage(sigma)
