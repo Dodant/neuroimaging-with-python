@@ -43,14 +43,15 @@ or
 python smoothing/smoothing.py 'INPUT NIfTI' 'OUTPUT NIfTI' SIGMA(optional)
 ```   
 
+### 5. Normalization (Work in Progress)   
+
 
 ## References
 - [InsightSoftwareConsortium/SimpleITK-Notebooks](https://github.com/InsightSoftwareConsortium/SimpleITK-Notebooks)
 - [SuperElastix/SimpleElastix](https://github.com/SuperElastix/SimpleElastix)
 - [voxelmorph/voxelmorph](https://github.com/voxelmorph/voxelmorph)
 - [iitzco/deepbrain](https://github.com/iitzco/deepbrain)
-
-
+- [ANTsX/ANTsPy](https://github.com/ANTsX/ANTsPy)
 
 
 ## ETC
