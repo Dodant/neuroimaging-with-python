@@ -13,7 +13,7 @@
 
 ## Feature
 ### 1. Rotate DICOM Format
-here : [rotation/rotateimage.py](https://github.com/Dodant/neuroimaging-with-python/blob/main/rotation/rotateimage.py)   
+here : [rotation/rotate_image.py](https://github.com/Dodant/neuroimaging-with-python/blob/main/rotation/rotate_image.py)   
 Rotation Angle - Positive(+) value - ACW / Negative(-) value - CW   
 ```shell
 python rotation/rotateimage.py 'INPUT DIRECTORY' 'OUTPUT DIRECTORY' ROTATION-ANGLE
