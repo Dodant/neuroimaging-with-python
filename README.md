@@ -57,9 +57,15 @@ python smoothing/smoothing.py 'INPUT NIfTI' 'OUTPUT NIfTI' SIGMA(optional)
 ## ETC
 - [Download](http://nist.mni.mcgill.ca/?page_id=714) Brain Templates and Atlases here (MNI Space)
 - [Download](https://www.microdicom.com/downloads.html) DICOM Viewer here (MicroDicom)  
+- [Download](https://nifti-to-dicom.en.softonic.com/) NIfTI to DICOM here
 - NIfTI Viewer : https://socr.umich.edu/HTML5/BrainViewer/
 - DICOM to NIfTI
   ```shell
   pip install dcm2nii
   dcm2nii 'DICOM DIRECTORY'
   ```
+- DICOM or NIfTI to JPEG or PNG
+   ```shell
+   pip install med2image
+   med2image -i 'INPUT DICOM OR NIfTI' -d 'OUTPUT DIRECTORY`
+   ```
