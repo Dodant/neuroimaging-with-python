@@ -10,6 +10,7 @@
 - [Nibabel](https://nipy.org/nibabel/#) - Successor of PyNIfTI
 - OpenCV - Open Source Computer Vision Library
 - NumPy
+`pip install -r requirements.txt`
 
 ## Feature
 ### 1. Rotate DICOM Format
