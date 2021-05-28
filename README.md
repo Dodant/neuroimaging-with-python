@@ -69,3 +69,18 @@ python smoothing/smoothing.py 'INPUT NIfTI' 'OUTPUT NIfTI' SIGMA(optional)
    pip install med2image
    med2image -i 'INPUT DICOM OR NIfTI' -d 'OUTPUT DIRECTORY`
    ```
+- Brain Extraction Tools (a.k.a Skull-Stripping)
+  - [ROBEX](https://www.nitrc.org/projects/robex)(Robust Brain Extraction) for Linux (Windows is not supported)   
+  or   
+    ```shell
+    pip install pyrobex
+    robex path/to/t1w_image.nii -os path/to/stripped.nii -om path/to/mask.nii
+    ```
+    ```python
+    import nibabel as nib
+    from pyrobex.robex import robex
+    image = nib.load('path/to/t1w_image.nii')
+    stripped, mask = robex(image)
+    ```
+  - [HD-BET](https://github.com/MIC-DKFZ/HD-BET) for Linux   
+    `hd-bet -i INPUT_FOLDER -o OUTPUT_FOLDER`
