@@ -44,6 +44,43 @@ python smoothing/smoothing.py 'INPUT NIfTI' 'OUTPUT NIfTI' SIGMA(optional)
 ```   
 
 ### 5. Normalization (Work in Progress)   
+```shell
+pip install intensity-normalization
+```
+#### Individual time-point normalization methods
+- `zscore-normalize`: Z-score normalization 
+   ```shell
+   zsocre-normalize --image IMAGE --output-dir OUTPUT_DIR ([--brain-mask BRAIN_MASK] [--single-img])
+   ```
+- `fcm-normalize`: Fuzzy C-means (FCM)-based tissue-based mean normalization 
+  ```shell
+  fcm-normalize --image IMAGE --brain-mask BRAIN_MASK --tissue-mask TISSUE_MASK --output-dir OUTPUT_DIR ([--tissue-type {wm,gm,csf}] [--single-img])
+  ```
+- `gmm-normalize`: Gaussian Mixture Model (GMM)-based WM mean normalization 
+  ```shell
+  gmm-normalize --image IMAGE --brain-mask BRAIN_MASK --output-dir OUTPUT_DIR ([--contrast {t1,t2,flair}] [--single-img])
+  ```
+- `kde-normalize`: Kernel Density Estimate (KDE) WM mode normalization 
+  ```shell
+  kde-normalize --image IMAGE --brain-mask BRAIN_MASK ([--output-dir OUTPUT_DIR] [--contrast {t1,t2,flair,md, largest, first, last}] [--single-img])
+  ```
+- `ws-normalize`: WhiteStripe 
+  ```shell
+  ws-normalize --img-dir IMG_DIR --mask-dir MASK_DIR --output-dir OUTPUT-DIR ([--contrast {t1,t2,flair,md}])
+  ```
+#### Sample-based normalization methods
+- `lsq-normalize`: Least squares (LSQ) tissue mean normalization 
+  ```shell
+  lsq-normalize --img-dir IMG_DIR --output-dir OUTPUT_DIR ([--mask-dir MASK_DIR])
+  ```
+- `nyul-normalize`: Piecewise Linear Histogram Matching (Nyúl & Udupa) 
+  ```shell
+  nyul-normalize --img-dir IMG_DIR --output-dir OUTPUT_DIR ([--mask-dir MASK_DIR])
+  ```
+- `ravel-normalize`: RAVEL 
+  ```shell
+  ravel-normalize --img-dir IMG_DIR --mask-dir MASK_DIR ([--output-dir OUTPUT_DIR] [--contrast {t1,t2,flair}])
+  ```
 
 
 ## References
