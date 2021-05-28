@@ -47,11 +47,16 @@ python smoothing/smoothing.py 'INPUT NIfTI' 'OUTPUT NIfTI' SIGMA(optional)
 
 
 ## References
-- [InsightSoftwareConsortium/SimpleITK-Notebooks](https://github.com/InsightSoftwareConsortium/SimpleITK-Notebooks)
-- [SuperElastix/SimpleElastix](https://github.com/SuperElastix/SimpleElastix)
-- [voxelmorph/voxelmorph](https://github.com/voxelmorph/voxelmorph)
-- [iitzco/deepbrain](https://github.com/iitzco/deepbrain)
-- [ANTsX/ANTsPy](https://github.com/ANTsX/ANTsPy)
+- Image Registraion
+  - [InsightSoftwareConsortium/SimpleITK-Notebooks](https://github.com/InsightSoftwareConsortium/SimpleITK-Notebooks)
+  - [SuperElastix/SimpleElastix](https://github.com/SuperElastix/SimpleElastix)
+  - [voxelmorph/voxelmorph](https://github.com/voxelmorph/voxelmorph)
+- Brain Extraction
+  - [iitzco/deepbrain](https://github.com/iitzco/deepbrain)
+- Normalization
+  - [ANTsX/ANTsPy](https://github.com/ANTsX/ANTsPy)
+  - [jcreinhold/intensity-normalization](https://github.com/jcreinhold/intensity-normalization)
+  - [sergivalverde/MRI_intensity_normalization](https://github.com/sergivalverde/MRI_intensity_normalization)
 
 
 ## ETC
