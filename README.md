@@ -9,7 +9,8 @@
 - [Pydicom](https://github.com/pydicom/pydicom) - Python package for working with DICOM files 
 - [Nibabel](https://nipy.org/nibabel/#) - Successor of PyNIfTI
 - OpenCV - Open Source Computer Vision Library
-- NumPy
+- NumPy   
+
 `pip install -r requirements.txt`
 
 ## Feature
