@@ -4,17 +4,17 @@
 Make It Possible Fundamental SPM Features in Python
 
 ## Table of Contents
-- [Format](Format)
-- [Requirements](Requirements)
-- [Feature](Feature)
-   - [Rotate DICOM Format](1.-Rotate-DICOM-Format)
-   - [Display Dicom Format](2.-Display-Dicom-Format)
-   - [Image Registration](3.-Image-Registration)
-   - [Smoothing](4.-Smoothing)
-   - [Normalization](5.-Normalization)
-   - [Brain Extraction](6.-Brain-Extraction-a.k.a.-Skull-Stripping)
-- [References](References)
-- [ETC](ETC)
+- [Format](#format)
+- [Requirements](#requirements)
+- [Feature](#feature)
+   + [Rotate DICOM Format](#1-rotate-dicom-format)
+   + [Display Dicom Format](#2-display-dicom-format)
+   + [Image Registration](#3-image-registration)
+   + [Smoothing](#4-smoothing)
+   + [Normalization](#5-normalization)
+   + [Brain Extraction](#6-brain-extraction-aka-skull-stripping)
+- [References](#references)
+- [ETC](#etc)
  
 ## Format
 - DICOM (.dcm) - Digital Imaging and Communications in Medicine
@@ -30,7 +30,7 @@ Make It Possible Fundamental SPM Features in Python
 `pip install -r requirements.txt`
 
 ## Feature
-### 1. Rotate DICOM Format
+### 1. Rotate Dicom Format
 here : [rotation/rotate_image.py](https://github.com/Dodant/neuroimaging-with-python/blob/main/rotation/rotate_image.py)   
 Rotation Angle - Positive(+) value - ACW / Negative(-) value - CW   
 ```shell
