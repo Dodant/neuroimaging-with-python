@@ -1,5 +1,21 @@
 ﻿# Neuroimaging with Python
  
+## Overview
+Make It Possible Fundamental SPM Features in Python
+
+## Table of Contents
+- [Format](Format)
+- [Requirements](Requirements)
+- [Feature](Feature)
+   - [Rotate DICOM Format](1.-Rotate-DICOM-Format)
+   - [Display Dicom Format](2.-Display-Dicom-Format)
+   - [Image Registration](3.-Image-Registration)
+   - [Smoothing](4.-Smoothing)
+   - [Normalization](5.-Normalization)
+   - [Brain Extraction](6.-Brain-Extraction-a.k.a.-Skull-Stripping)
+- [References](References)
+- [ETC](ETC)
+ 
 ## Format
 - DICOM (.dcm) - Digital Imaging and Communications in Medicine
 - NIfTI (.nii) - **Neuroimaging** Informatics Technology Initiative
@@ -45,7 +61,7 @@ or
 python smoothing/smoothing.py 'INPUT NIfTI' 'OUTPUT NIfTI' SIGMA(optional)
 ```   
 
-### 5. Normalization 
+### 5. Normalization
 ```shell
 pip install intensity-normalization
 ```
