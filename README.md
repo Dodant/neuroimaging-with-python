@@ -70,7 +70,6 @@ pip install intensity-normalization
 
 ### 6. Brain Extraction a.k.a. Skull-Stripping
 [ROBEX](https://www.nitrc.org/projects/robex)(Robust Brain Extraction) for Linux (Windows is not supported)   
-or   
 ```shell
 pip install pyrobex
 robex path/to/t1w_image.nii -os path/to/stripped.nii -om path/to/mask.nii
@@ -81,7 +80,10 @@ from pyrobex.robex import robex
 image = nib.load('path/to/t1w_image.nii')
 stripped, mask = robex(image)
 ```
-
+#### Multi Stripping
+```shell
+python multi_brain_extraction.py path/to/original -os path/to/stripped -om path/to/mask
+```
 
 ## References
 - Image Registraion
