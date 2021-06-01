@@ -2,6 +2,7 @@ import SimpleITK as sitk
 import numpy as np
 import os, sys
 import nibabel as nib
+import nibabel.processing
 from pyrobex.robex import robex 
 
 def AIO(FIXED_IMAGE, MOVING_IMAGE, learningRate=0.1, sigma=3): 
@@ -43,16 +44,18 @@ def AIO(FIXED_IMAGE, MOVING_IMAGE, learningRate=0.1, sigma=3):
 
     moving_resampled = sitk.Resample(moving_image, fixed_image, final_transform, sitk.sitkLinear, 0.0, moving_image.GetPixelID())
 
-    RGSTRTN_IMAGE = MOVING_IMAGE[:MOVING_IMAGE.find('.')] + "_RGSTRTN" + MOVING_IMAGE[MOVING_IMAGE.find('.'):]
+    RGSTRTN_IMAGE = MOVING_IMAGE[:MOVING_IMAGE.rfind('.')] + "_RGSTRTN" + MOVING_IMAGE[MOVING_IMAGE.rfind('.'):]
+    print(RGSTRTN_IMAGE)
     sitk.WriteImage(moving_resampled, RGSTRTN_IMAGE)
-    sitk.WriteTransform(final_transform, MOVING_IMAGE[:MOVING_IMAGE.find('.')] + "_TRNSFRM.tfm")
+    sitk.WriteTransform(final_transform, MOVING_IMAGE[:MOVING_IMAGE.rfind('.')] + "_TRNSFRM.tfm")
 
 
     ## Smoothing
     img = nib.load(RGSTRTN_IMAGE)
     fhwm = nib.processing.sigma2fwhm(sigma)
     smoothed_img = nib.processing.smooth_image(img, fhwm)
-    SMTH_IMAGE = RGSTRTN_IMAGE[:RGSTRTN_IMAGE.find('.')] + "_SMTH" + RGSTRTN_IMAGE[RGSTRTN_IMAGE.find('.'):]
+    SMTH_IMAGE = RGSTRTN_IMAGE[:RGSTRTN_IMAGE.rfind('.')] + "_SMTH" + RGSTRTN_IMAGE[RGSTRTN_IMAGE.rfind('.'):]
+    print(SMTH_IMAGE)
     nib.save(smoothed_img, SMTH_IMAGE)
 
 
@@ -67,11 +70,12 @@ def AIO(FIXED_IMAGE, MOVING_IMAGE, learningRate=0.1, sigma=3):
 if __name__ == "__main__":
     if len(sys.argv) == 3:
         brain_template = sys.argv[1]
-        path = sys.argv[2]
-        file_list = os.listdir(path)
+        folder_path = sys.argv[2]
+        file_list = os.listdir(folder_path)
         file_list = [nii for nii in file_list if nii.endswith((".nii", ".nii.gz"))]
         for path in file_list:
-            AIO(brain_template, path)
+            print(path)
+            AIO(brain_template, folder_path + "/" + path)
     else: 
         print("error")
         exit(0)
