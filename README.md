@@ -119,11 +119,6 @@ python multi_brain_extraction.py path/to/original -os path/to/stripped -om path/
 - [Download](https://www.microdicom.com/downloads.html) DICOM Viewer here (MicroDicom)  
 - [Download](https://nifti-to-dicom.en.softonic.com/) NIfTI to DICOM here
 - NIfTI Viewer : https://socr.umich.edu/HTML5/BrainViewer/
-- DICOM to NIfTI
-  ```shell
-  pip install dcm2nii
-  dcm2nii 'DICOM DIRECTORY'
-  ```
 - DICOM or NIfTI to JPEG or PNG
    ```shell
    pip install med2image
