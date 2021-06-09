@@ -5,7 +5,7 @@ import nibabel as nib
 import nibabel.processing
 from pyrobex.robex import robex 
 
-def AIO(FIXED_IMAGE, MOVING_IMAGE, learningRate=0.1, sigma=3): 
+def AIO3(FIXED_IMAGE, MOVING_IMAGE, learningRate=1.0, sigma=3): 
     
     ## Registration
     fixed_image = sitk.ReadImage(FIXED_IMAGE, sitk.sitkFloat32)
@@ -45,7 +45,7 @@ def AIO(FIXED_IMAGE, MOVING_IMAGE, learningRate=0.1, sigma=3):
     moving_resampled = sitk.Resample(moving_image, fixed_image, final_transform, sitk.sitkLinear, 0.0, moving_image.GetPixelID())
 
     RGSTRTN_IMAGE = MOVING_IMAGE[:MOVING_IMAGE.rfind('.')] + "_RGSTRTN" + MOVING_IMAGE[MOVING_IMAGE.rfind('.'):]
-    print(RGSTRTN_IMAGE)
+    print(type(moving_resampled), 'resample')
     sitk.WriteImage(moving_resampled, RGSTRTN_IMAGE)
     sitk.WriteTransform(final_transform, MOVING_IMAGE[:MOVING_IMAGE.rfind('.')] + "_TRNSFRM.tfm")
 
@@ -55,7 +55,7 @@ def AIO(FIXED_IMAGE, MOVING_IMAGE, learningRate=0.1, sigma=3):
     fhwm = nib.processing.sigma2fwhm(sigma)
     smoothed_img = nib.processing.smooth_image(img, fhwm)
     SMTH_IMAGE = RGSTRTN_IMAGE[:RGSTRTN_IMAGE.rfind('.')] + "_SMTH" + RGSTRTN_IMAGE[RGSTRTN_IMAGE.rfind('.'):]
-    print(SMTH_IMAGE)
+    print(type(smoothed_img), 'smooth')
     nib.save(smoothed_img, SMTH_IMAGE)
 
 
@@ -65,19 +65,24 @@ def AIO(FIXED_IMAGE, MOVING_IMAGE, learningRate=0.1, sigma=3):
 
     nib.save(stripped, os.path.dirname(SMTH_IMAGE) + '../stripped/' + os.path.basename(SMTH_IMAGE))
     nib.save(mask, os.path.dirname(SMTH_IMAGE) + '../mask/' + os.path.basename(SMTH_IMAGE))
-    
+    print(type(stripped), 'skipped')
+    print(type(mask), 'mask')
+    print("Complete", MOVING_IMAGE)
     
 
 
 if __name__ == "__main__":
+    print(123)
     if len(sys.argv) == 3:
+        print(sys.argv)
         brain_template = sys.argv[1]
         folder_path = sys.argv[2]
         file_list = os.listdir(folder_path)
         file_list = [nii for nii in file_list if nii.endswith((".nii", ".nii.gz"))]
+        print(file_list)
         for path in file_list:
             print(path)
-            AIO(brain_template, folder_path + "/" + path)
+            AIO3(brain_template, folder_path + "/" + path)
     else: 
         print("error")
         exit(0)
