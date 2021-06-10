@@ -9,10 +9,11 @@ Make It Possible Fundamental SPM Features in Python
 - [Feature](#feature)
    + [Rotate DICOM Format](#1-rotate-dicom-format)
    + [Display Dicom Format](#2-display-dicom-format)
-   + [Image Registration](#3-image-registration)
-   + [Smoothing](#4-smoothing)
-   + [Normalization](#5-normalization)
-   + [Brain Extraction](#6-brain-extraction-aka-skull-stripping)
+   + [DICOM to NIFTI](#3-dicom-to-nifti)
+   + [Image Registration](#4-image-registration)
+   + [Smoothing](#5-smoothing)
+   + [Normalization](#6-normalization)
+   + [Brain Extraction](#7-brain-extraction-aka-skull-stripping)
 - [References](#references)
 - [ETC](#etc)
  
@@ -24,6 +25,7 @@ Make It Possible Fundamental SPM Features in Python
 - [**SimpleITK**](https://github.com/SimpleITK/SimpleITK) - Open Source Insight Segmentation and Registration Toolkit
 - [Pydicom](https://github.com/pydicom/pydicom) - Python package for working with DICOM files 
 - [Nibabel](https://nipy.org/nibabel/#) - Successor of PyNIfTI
+- [dicom2nifti](https://github.com/icometrix/dicom2nifti) - Python library for converting dicom files to nifti
 - OpenCV - Open Source Computer Vision Library
 - NumPy   
 
@@ -36,6 +38,7 @@ Rotation Angle - Positive(+) value - ACW / Negative(-) value - CW
 ```shell
 python rotation/rotateimage.py 'INPUT DIRECTORY' 'OUTPUT DIRECTORY' ROTATION-ANGLE
 ```   
+
 ### 2. Display Dicom Format
 here : [display/display_dicom.ipynb](https://github.com/Dodant/neuroimaging-with-python/blob/main/display/display_dicom.ipynb)   
 Run Jupyter Notebook and Change 'folder_path'   
@@ -44,7 +47,18 @@ or
 python display/display_dicom.py 'DICOM FOLDER PATH'
 ```
 
-### 3. Image Registration
+### 3. DICOM to NIFTI
+for handling single sample
+```shell
+python dcm_to_nii_date.py 'SAMPLE_FOLDER'
+```
+for handling multiple samples
+```shell
+python dcms_to_nii_date.py 'DIRECTORY_OF_DICOM_SAMPLES'
+```
+
+
+### 4. Image Registration
 here : [image_registration/image_registration.ipynb](https://github.com/Dodant/neuroimaging-with-python/blob/main/image_registration/image_registration.ipynb)   
 **Input** - Fixed Image & Moving Image (.nii, .mha, ...)   
 **Output** - Moved Image & Transformation File (.tfm)   
@@ -52,7 +66,8 @@ or
 ```shell
 python image_registration/image_registration.py 'FIXED IMAGE' 'MOVING IMAGE' LearningRate(optional)
 ```
-### 4. Smoothing
+
+### 5. Smoothing
 here : [smoothing/smoothing.ipynb](https://github.com/Dodant/neuroimaging-with-python/blob/main/smoothing/smoothing.ipynb)   
 **Input** - NIfTI Image (.nii)   
 **Output** - Smoothed Image (.nii)   
@@ -61,7 +76,7 @@ or
 python smoothing/smoothing.py 'INPUT NIfTI' 'OUTPUT NIfTI' SIGMA(optional)
 ```   
 
-### 5. Normalization
+### 6. Normalization
 ```shell
 pip install intensity-normalization
 ```
@@ -84,7 +99,7 @@ pip install intensity-normalization
 - RAVEL   
   `ravel-normalize --img-dir IMG_DIR --mask-dir MASK_DIR ([--output-dir OUTPUT_DIR] [--contrast {t1,t2,flair}])`
 
-### 6. Brain Extraction a.k.a. Skull-Stripping
+### 7. Brain Extraction a.k.a. Skull-Stripping
 [ROBEX](https://www.nitrc.org/projects/robex)(Robust Brain Extraction) for Linux (Windows is not supported)   
 ```shell
 pip install pyrobex
