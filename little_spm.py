@@ -66,14 +66,15 @@ if __name__ == "__main__":
                                          '\tpython little_spm.py --convert --directory \'SAMPLE DIRECTORY\'\n'\
                                          '\tex) python little_spm.py --convert -d 15819775_T1\n\n'\
                                      '3. Image Registration\n'\
-                                         
+                                         '\t\n\n'\
                                      '4. Brain Smoothing\n'\
                                          '\tpython little_spm.py --smoothing --input \'NIFTI FILE\' --fwhm FWHM\n'\
                                          '\tex) python little_spm.py --smoothing -i 15819775_T1 -f 8\n\n'\
-                                     '5. Brain Extraction\n'\
+                                     '5. Brain Extraction (Only run in Linux)\n'\
                                          '\tpython little_spm.py --extract --input \'NIFTI FILE\'\n'\
                                          '\tex) python little_spm.py --extract -i 15819775_T1\n\n'\
-                                     '6. Normalization',
+                                     '6. Normalization\n'\
+                                         '\t\n\n',
                                     epilog="Written by Dodant",
                                     formatter_class=RawTextHelpFormatter)
 
@@ -112,7 +113,7 @@ if __name__ == "__main__":
     #Brain Stripping - Complete
     parser.add_argument('--extract',
                         action='store_true',
-                        help="Skill Stripping (Only run in Linux)")
+                        help="Skill Stripping")
 
     #Normalization - Work in Progress
     parser.add_argument('--normalization',
