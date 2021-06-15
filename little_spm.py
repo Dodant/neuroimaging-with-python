@@ -2,6 +2,7 @@ import argparse
 from argparse import RawTextHelpFormatter
 import sys, os
 
+from pyrobex.robex import robex
 import SimpleITK as sitk
 import nibabel as nib
 import nibabel.processing
@@ -10,7 +11,7 @@ import pydicom as dcm
 import imutils
 import numpy as np
 import cv2
-# from pyrobex.robex as robex
+
 
 def rotate_dicom_seires(inputDirectory, degOfRotation):
     dcmList = os.listdir(inputDirectory)
@@ -48,6 +49,12 @@ def brain_smoothing(input_img, fwhm):
     nib.save(smoothed_img, input_img[:input_img.find('.')] + "_smth.nii")
     print("complete", input_img)
 
+def brain_extraction(input_img):
+    image = nib.load(input_img)
+    stripped, mask = robex(image)
+    nib.save(stripped, input_img + '_stripped.nii')
+    nib.save(mask, input_img + '_mask.nii')
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=
@@ -64,11 +71,13 @@ if __name__ == "__main__":
                                          '\tpython little_spm.py --smoothing --input \'NIFTI FILE\' --fwhm FWHM\n'\
                                          '\tex) python little_spm.py --smoothing -i 15819775_T1 -f 8\n\n'\
                                      '5. Brain Extraction\n'\
+                                         '\tpython little_spm.py --extract --input \'NIFTI FILE\'\n'\
+                                         '\tex) python little_spm.py --extract -i 15819775_T1\n\n'\
                                      '6. Normalization',
                                     epilog="Written by Dodant",
                                     formatter_class=RawTextHelpFormatter)
 
-    #Rotate
+    #Rotate - Complete
     parser.add_argument('--rotate', 
                         action='store_true',
                         help='Rotate Dicom Series')
@@ -78,12 +87,12 @@ if __name__ == "__main__":
                         type=int, 
                         help='Rotation Angle: Positive Value - ACW / Negative Value - CW')
     
-    #Dicom to Nifti
+    #Dicom to Nifti - Complete
     parser.add_argument('--convert',
                         action='store_true',
                         help='Convert Sample(Dicom Series) to Nifti')
 
-    #Image Registration
+    #Image Registration - Work in Progress
     parser.add_argument('--registration',
                         action='store_true')
     parser.add_argument('-i', '--input',
@@ -93,19 +102,19 @@ if __name__ == "__main__":
                         choices=['t1','t2','pet','spect'], 
                         default='brain_atlas')
     
-    #Brain Smoothing
+    #Brain Smoothing - Complete
     parser.add_argument('--smoothing',
                         action='store_true')
     parser.add_argument('-f', '--fwhm',
                         help="Full Width Half Max for Brain Smoothing",
                         type=int, default=6)
 
-    #Brain Stripping
-    parser.add_argument('--extraction',
+    #Brain Stripping - Complete
+    parser.add_argument('--extract',
                         action='store_true',
                         help="Skill Stripping (Only run in Linux)")
 
-    #Normalization
+    #Normalization - Work in Progress
     parser.add_argument('--normalization',
                         choices=['zscore','gmm','fcm','kde','ws'],
                         help=
@@ -116,9 +125,6 @@ if __name__ == "__main__":
                         "- WhiteStripe")
     parser.add_argument('-m', '--mask',
                         help='Mask for Normalization')
-
-    #All - 
-
 
     #ETC
     parser.add_argument('-v', '--version', action='version', version='%(prog)s 1.0')
@@ -132,3 +138,6 @@ if __name__ == "__main__":
         
     if args.smoothing: 
         brain_smoothing(args.input, args.fwhm)
+        
+    if args.extract: 
+        brain_extraction(args.input)
