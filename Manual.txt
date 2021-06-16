@@ -1,0 +1,63 @@
+0. 사전 작업
+i. pip 설치
+pip는 파이썬으로 작성된 패키지 소프트웨어를 설치, 관리하는 패키지 관리 시스템
+- 윈도우 pip 설치 방법
+curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+python get-pip.py
+
+ii. 기본 Shell 명령어
+쉘(Shell)은 운영체제의 커널과 사용자간의 다리역할을 하는 것으로 
+사용자로부터 명령을 받아 그것을 해석하고 프로그램을 실행하는 역할
+디렉터리(Directory) = 폴더
+경로 연결 특수키 = \
+
+- cd: 디렉터리 이동 ex) cd Desktop
+- ls: 현재 디렉터리 리스트 확인 ex) ls Desktop
+- pwd: 현재 위치 확인 
+- .: 현제 디렉터리
+- ..: 상위 디렉터리 
+
+
+iii. PowerShell 
+- PowerShell 실행
+- 실행파일이 있는 곳까지 디렉토리 이동
+
+
+1. 기본 라이브러리 설치 작업
+pip install -r requirements.txt 
+라이브러리 리스트
+- nibabel
+- numpy
+- pyrobex
+- dicom2nifti
+- pydicom
+- SimpleITK
+- intensity-normalization
+
+
+2. 사용방법
+변환을 원하는 파일, 디렉터리를 little_spm.py이 있는 곳에 두고 
+python little_spm.py ~~~ 실행
+
+폴더로 작업하는 기능
+- Dicom to Nifti
+	python little_spm.py --rotate --directory 'SAMPLE DIRECTORY' --angle ANGLE
+             ex) python little_spm.py --rotate -d 15819775_T1 -a 3
+- Rotate Dicom
+	python little_spm.py --convert --directory 'SAMPLE DIRECTORY'
+             ex) python little_spm.py --convert -d 15819775_T1
+
+파일(.nii)로 작업하는 기능
+- Image Registration (진행중)
+- Brain Smoothing
+	python little_spm.py --smoothing --input 'NIFTI FILE' --fwhm FWHM
+             ex) python little_spm.py --smoothing -i 15819775_T1.nii -f 8
+- Brain Extraction (Only run in Linux)
+	python little_spm.py --extract --input 'NIFTI FILE'
+             ex) python little_spm.py --extract -i 15819775_T1.nii
+- Normalization (진행중)
+
+
+
+
+
