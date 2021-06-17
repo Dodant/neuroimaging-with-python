@@ -3,6 +3,7 @@ from argparse import RawTextHelpFormatter
 import sys, os
 
 from pyrobex.robex import robex
+from scipy.ndimage import zoom
 import SimpleITK as sitk
 import nibabel as nib
 import nibabel.processing
@@ -34,7 +35,7 @@ def rotate_dicom_seires(inputDirectory, degOfRotation):
         writer.KeepOriginalImageUIDOn()
         writer.SetFileName(os.path.join(outputDirectory, imgName))
         writer.Execute(filtered_image)
-    print(inputDirectory +' saved successfully')
+    print(inputDirectory, 'saved successfully')
 
 def convert_dcm_dir_to_nifti(inputDirectory): 
     dicom2nifti.dicom_series_to_nifti(inputDirectory, inputDirectory)
@@ -47,19 +48,30 @@ def brain_smoothing(input_img, fwhm):
     img = nib.load(input_img)
     smoothed_img = nib.processing.smooth_image(img, fwhm)
     nib.save(smoothed_img, input_img[:input_img.find('.')] + "_smth.nii")
-    print("complete", input_img)
+    print("Complete", input_img)
 
 def brain_extraction(input_img):
     image = nib.load(input_img)
     stripped, mask = robex(image)
     nib.save(stripped, input_img + '_stripped.nii')
     nib.save(mask, input_img + '_mask.nii')
+    print("Complete", input_img)
 
 def brain_normalization(input_img): 
     input_img = sitk.ReadImage(input_img, sitk.sitkFloat32)
     input_img_nor = sitk.Normalize(input_img)
     sitk.WriteImage(input_img_nor, input_img[:input_img.find('.')] + "_normal.nii")
+    print("Complete", input_img)
 
+def brain_resize(input_img, x, y, z): 
+    image_nib = nib.load(input_img)
+    image = image_nib.get_fdata()
+    resized_image = zoom(image, (x/image.shape[0], y/image.shape[1], z/image.shape[2]))
+    image_nifti = nib.Nifti1Image(resized_image, np.eye(4))
+    nib.save(image_nifti, input_img[:input_img.find('.')] + "_resize.nii")
+    print("Complete", input_img)
+    
+    
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=
                                      'Little SPM Written in Python\n\n'\
@@ -79,7 +91,10 @@ if __name__ == "__main__":
                                          '\tex) python little_spm.py --extract -i 15819775_T1.nii\n\n'\
                                      '6. Normalization\n'\
                                          '\tpython little_spm.py --normalize --input \'NIFTI FILE\'\n'\
-                                         '\tex) python little_spm.py --normalize -i 15819775_T1.nii\n\n',
+                                         '\tex) python little_spm.py --normalize -i 15819775_T1.nii\n\n'\
+                                     '7. Resize\n'\
+                                         '\tpython little_spm.py --resize --input \'NIFTI FILE\' -x X -y Y -z Z\n'\
+                                         '\tex) python little_spm.py --normalize -i 15819775_T1.nii -x 160 -y 190 -z 224\n\n',
                                     epilog="Written by Dodant",
                                     formatter_class=RawTextHelpFormatter)
 
@@ -124,6 +139,13 @@ if __name__ == "__main__":
     parser.add_argument('--normalize',
                         action='store_true')
 
+    #Resize 
+    parser.add_argument('--resize',
+                        action='store_true')
+    parser.add_argument('-x')
+    parser.add_argument('-y')
+    parser.add_argument('-z')
+
     #ETC
     parser.add_argument('-v', '--version', action='version', version='%(prog)s 1.1')
     args = parser.parse_args()
@@ -142,3 +164,6 @@ if __name__ == "__main__":
         
     if args.normalize:
         brain_normalization(args.input)
+        
+    if args.resize:
+        brain_resize(args.input, args.x, args.y, args.z)
