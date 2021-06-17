@@ -55,6 +55,10 @@ def brain_extraction(input_img):
     nib.save(stripped, input_img + '_stripped.nii')
     nib.save(mask, input_img + '_mask.nii')
 
+def brain_normalization(input_img): 
+    input_img = sitk.ReadImage(input_img, sitk.sitkFloat32)
+    input_img_nor = sitk.Normalize(input_img)
+    sitk.WriteImage(input_img_nor, input_img[:input_img.find('.')] + "_normal.nii")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=
@@ -69,12 +73,13 @@ if __name__ == "__main__":
                                          '\t\n\n'\
                                      '4. Brain Smoothing\n'\
                                          '\tpython little_spm.py --smoothing --input \'NIFTI FILE\' --fwhm FWHM\n'\
-                                         '\tex) python little_spm.py --smoothing -i 15819775_T1 -f 8\n\n'\
+                                         '\tex) python little_spm.py --smoothing -i 15819775_T1.nii -f 8\n\n'\
                                      '5. Brain Extraction (Only run in Linux)\n'\
                                          '\tpython little_spm.py --extract --input \'NIFTI FILE\'\n'\
-                                         '\tex) python little_spm.py --extract -i 15819775_T1\n\n'\
+                                         '\tex) python little_spm.py --extract -i 15819775_T1.nii\n\n'\
                                      '6. Normalization\n'\
-                                         '\t\n\n',
+                                         '\tpython little_spm.py --normalize --input \'NIFTI FILE\'\n'\
+                                         '\tex) python little_spm.py --normalize -i 15819775_T1.nii\n\n',
                                     epilog="Written by Dodant",
                                     formatter_class=RawTextHelpFormatter)
 
@@ -115,20 +120,12 @@ if __name__ == "__main__":
                         action='store_true',
                         help="Skill Stripping")
 
-    #Normalization - Work in Progress
-    parser.add_argument('--normalization',
-                        choices=['zscore','gmm','fcm','kde','ws'],
-                        help=
-                        "- Z-Score Normalization\n"\
-                        "- Fuzzy C-means (FCM)-based tissue-based mean Normalization\n"\
-                        "- Gaussian Mixture Model (GMM)-based WM mean Normalization\n"\
-                        "- Kernel Density Estimate (KDE) WM mode Normalization\n"\
-                        "- WhiteStripe")
-    parser.add_argument('-m', '--mask',
-                        help='Mask for Normalization')
+    #Normalization - Complete
+    parser.add_argument('--normalize',
+                        action='store_true')
 
     #ETC
-    parser.add_argument('-v', '--version', action='version', version='%(prog)s 1.0')
+    parser.add_argument('-v', '--version', action='version', version='%(prog)s 1.1')
     args = parser.parse_args()
 
     if args.rotate: 
@@ -142,3 +139,6 @@ if __name__ == "__main__":
         
     if args.extract: 
         brain_extraction(args.input)
+        
+    if args.normalize:
+        brain_normalization(args.input)
