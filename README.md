@@ -14,8 +14,9 @@ Make It Possible Fundamental SPM Features in Python
    + [Smoothing](#5-smoothing)
    + [Normalization](#6-normalization)
    + [Brain Extraction](#7-brain-extraction-aka-skull-stripping)
+   + Brain Resize
 - [References](#references)
-- [ETC](#etc)
+- [Tips](#tips)
  
 ## Format
 - DICOM (.dcm) - Digital Imaging and Communications in Medicine
@@ -129,10 +130,11 @@ python multi_brain_extraction.py path/to/original -os path/to/stripped -om path/
   - [sergivalverde/MRI_intensity_normalization](https://github.com/sergivalverde/MRI_intensity_normalization)
 
 
-## ETC
+## Tips
 - [Download](http://nist.mni.mcgill.ca/?page_id=714) Brain Templates and Atlases here (MNI Space)
 - [Download](https://www.microdicom.com/downloads.html) DICOM Viewer here (MicroDicom)  
 - [Download](https://nifti-to-dicom.en.softonic.com/) NIfTI to DICOM here
+- [Download](https://xmedcon.sourceforge.io/) (X)MedCon - Open Source Toolkit for Medical Image Conversion
 - NIfTI Viewer : https://socr.umich.edu/HTML5/BrainViewer/
 - DICOM or NIfTI to JPEG or PNG
    ```shell
