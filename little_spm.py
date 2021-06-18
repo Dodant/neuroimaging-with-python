@@ -1,17 +1,18 @@
 import argparse
+import os
+import sys
 from argparse import RawTextHelpFormatter
-import sys, os
 
-from pyrobex.robex import robex
-from scipy.ndimage import zoom
-import SimpleITK as sitk
+import cv2
+import dicom2nifti
+import imutils
 import nibabel as nib
 import nibabel.processing
-import dicom2nifti 
-import pydicom as dcm
-import imutils
 import numpy as np
-import cv2
+import pydicom as dcm
+import SimpleITK as sitk
+from pyrobex.robex import robex
+from scipy.ndimage import zoom
 
 
 def rotate_dicom_seires(inputDirectory, degOfRotation):
@@ -58,8 +59,8 @@ def brain_extraction(input_img):
     print("Complete", input_img)
 
 def brain_normalization(input_img): 
-    input_img = sitk.ReadImage(input_img, sitk.sitkFloat32)
-    input_img_nor = sitk.Normalize(input_img)
+    input_img_nii = sitk.ReadImage(input_img, sitk.sitkFloat32)
+    input_img_nor = sitk.Normalize(input_img_nii)
     sitk.WriteImage(input_img_nor, input_img[:input_img.find('.')] + "_normal.nii")
     print("Complete", input_img)
 
