@@ -42,7 +42,7 @@ def convert_dcm_dir_to_nifti(inputDirectory):
     print("Complete", inputDirectory)
 
 def image_registration(input_img, template):
-    os.system(f'python ./scripts/tf/register.py --moving {input_img} --fixed {template} --moved {input_img}_voxel.nii --model brain_3D.h5')
+    os.system(f'python ./voxelmorph/scripts/tf/register.py --moving {input_img} --fixed {template} --moved {input_img}_voxel.nii --model brain_3D.h5')
     print("Complete", input_img)
     
 def brain_smoothing(input_img, fwhm): 
@@ -163,11 +163,11 @@ if __name__ == "__main__":
         
     if args.registration: 
         if args.template == 'brain_atlas' or 'pet' or 'spect': 
-            temp = "templates/mni_icbm152_t1_tal_nlin_sym_09a_nml.nii"
+            temp = "voxelmorph/templates/mni_icbm152_t1_tal_nlin_sym_09a_nml.nii"
         elif args.template == 't1':
-            temp = "templates/mni_icbm152_t1_tal_nlin_sym_09c_nml.nii"
+            temp = "voxelmorph/templates/mni_icbm152_t1_tal_nlin_sym_09c_nml.nii"
         elif args.template == 't2':
-            temp = "templates/mni_icbm152_t2_tal_nlin_sym_09c_nml.nii"
+            temp = "voxelmorph/templates/mni_icbm152_t2_tal_nlin_sym_09c_nml.nii"
         image_registration(args.input, temp)
 
     if args.smoothing: 
