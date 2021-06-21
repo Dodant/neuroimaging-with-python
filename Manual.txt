@@ -47,7 +47,9 @@ python little_spm.py ~~~ 실행
              ex) python little_spm.py --convert -d 15819775_T1
 
 파일(.nii)로 작업하는 기능
-- Image Registration (진행중)
+- Image Registration
+	python little_spm.py --registration --input <nifti file> --template <brain atlas>
+	ex) python little_spm.py --registration -i 15819775_T1.nii -t t1
 - Brain Smoothing
 	python little_spm.py --smoothing --input <nifti file> --fwhm <fwhm>
              ex) python little_spm.py --smoothing -i 15819775_T1.nii -f 8

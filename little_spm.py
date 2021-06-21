@@ -12,7 +12,7 @@ import pydicom as dcm
 import SimpleITK as sitk
 from pyrobex.robex import robex
 from scipy.ndimage import zoom
-
+import os
 
 def rotate_dicom_seires(inputDirectory, degOfRotation):
     dcmList = os.listdir(inputDirectory)
@@ -41,6 +41,10 @@ def convert_dcm_dir_to_nifti(inputDirectory):
     dicom2nifti.dicom_series_to_nifti(inputDirectory, inputDirectory)
     print("Complete", inputDirectory)
 
+def image_registration(input_img, template):
+    os.system(f'python ./scripts/tf/register.py --moving {input_img} --fixed {template} --moved {input_img}_voxel.nii --model brain_3D.h5')
+    print("Complete", input_img)
+    
 def brain_smoothing(input_img, fwhm): 
     if not input_img.endswith(".nii"): 
         print("Input .nii file")
@@ -82,7 +86,8 @@ if __name__ == "__main__":
                                          '\tpython little_spm.py --convert --directory <sample directory>\n'\
                                          '\tex) python little_spm.py --convert -d 15819775_T1\n\n'\
                                      '3. Image Registration\n'\
-                                         '\t\n\n'\
+                                         '\tpython little_spm.py --registration --input <nifti file> --template <brain atlas>\n'\
+                                         '\tex) python little_spm.py --registration -i 15819775_T1.nii -t t1\n\n'\
                                      '4. Brain Smoothing\n'\
                                          '\tpython little_spm.py --smoothing --input <nifti file> --fwhm <fwhm>\n'\
                                          '\tex) python little_spm.py --smoothing -i 15819775_T1.nii -f 8\n\n'\
@@ -142,9 +147,9 @@ if __name__ == "__main__":
     #Resize 
     parser.add_argument('--resize',
                         action='store_true')
-    parser.add_argument('-x')
-    parser.add_argument('-y')
-    parser.add_argument('-z')
+    parser.add_argument('-x', default=160)
+    parser.add_argument('-y', default=192)
+    parser.add_argument('-z', default=224)
 
     #ETC
     parser.add_argument('-v', '--version', action='version', version='%(prog)s 1.1')
@@ -156,6 +161,15 @@ if __name__ == "__main__":
     if args.convert: 
         convert_dcm_dir_to_nifti(args.directory)
         
+    if args.registration: 
+        if args.template == 'brain_atlas' or 'pet' or 'spect': 
+            temp = "templates/mni_icbm152_t1_tal_nlin_sym_09a_nml.nii"
+        elif args.template == 't1':
+            temp = "templates/mni_icbm152_t1_tal_nlin_sym_09c_nml.nii"
+        elif args.template == 't2':
+            temp = "templates/mni_icbm152_t2_tal_nlin_sym_09c_nml.nii"
+        image_registration(args.input, temp)
+
     if args.smoothing: 
         brain_smoothing(args.input, args.fwhm)
         
