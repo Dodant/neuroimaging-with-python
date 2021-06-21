@@ -1,6 +1,5 @@
 import argparse
-import os
-import sys
+import os, sys
 from argparse import RawTextHelpFormatter
 
 import cv2
@@ -77,24 +76,24 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=
                                      'Little SPM Written in Python\n\n'\
                                      '1. Rotate Dicom Series\n'\
-                                         '\tpython little_spm.py --rotate --directory \'SAMPLE DIRECTORY\' --angle ANGLE\n'\
+                                         '\tpython little_spm.py --rotate --directory <sample directory> --angle <degree>\n'\
                                          '\tex) python little_spm.py --rotate -d 15819775_T1 -a 3 \n\n'\
                                      '2. Convert Dicom to Nifti\n'\
-                                         '\tpython little_spm.py --convert --directory \'SAMPLE DIRECTORY\'\n'\
+                                         '\tpython little_spm.py --convert --directory <sample directory>\n'\
                                          '\tex) python little_spm.py --convert -d 15819775_T1\n\n'\
                                      '3. Image Registration\n'\
                                          '\t\n\n'\
                                      '4. Brain Smoothing\n'\
-                                         '\tpython little_spm.py --smoothing --input \'NIFTI FILE\' --fwhm FWHM\n'\
+                                         '\tpython little_spm.py --smoothing --input <nifti file> --fwhm <fwhm>\n'\
                                          '\tex) python little_spm.py --smoothing -i 15819775_T1.nii -f 8\n\n'\
                                      '5. Brain Extraction (Only run in Linux)\n'\
-                                         '\tpython little_spm.py --extract --input \'NIFTI FILE\'\n'\
+                                         '\tpython little_spm.py --extract --input <nifti file>\n'\
                                          '\tex) python little_spm.py --extract -i 15819775_T1.nii\n\n'\
                                      '6. Normalization\n'\
-                                         '\tpython little_spm.py --normalize --input \'NIFTI FILE\'\n'\
+                                         '\tpython little_spm.py --normalize --input <nifti file>\n'\
                                          '\tex) python little_spm.py --normalize -i 15819775_T1.nii\n\n'\
                                      '7. Resize\n'\
-                                         '\tpython little_spm.py --resize --input \'NIFTI FILE\' -x X -y Y -z Z\n'\
+                                         '\tpython little_spm.py --resize --input <nifti file> -x <x> -y <y> -z <z>\n'\
                                          '\tex) python little_spm.py --normalize -i 15819775_T1.nii -x 160 -y 190 -z 224\n\n',
                                     epilog="Written by Dodant",
                                     formatter_class=RawTextHelpFormatter)

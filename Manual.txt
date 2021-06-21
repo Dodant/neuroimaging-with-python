@@ -32,7 +32,6 @@ pip install -r requirements.txt
 - dicom2nifti
 - pydicom
 - SimpleITK
-- intensity-normalization
 
 
 2. 사용방법
@@ -41,22 +40,26 @@ python little_spm.py ~~~ 실행
 
 폴더로 작업하는 기능
 - Dicom to Nifti
-	python little_spm.py --rotate --directory 'SAMPLE DIRECTORY' --angle ANGLE
+	python little_spm.py --rotate --directory <sample directory> --angle <degree>
              ex) python little_spm.py --rotate -d 15819775_T1 -a 3
 - Rotate Dicom
-	python little_spm.py --convert --directory 'SAMPLE DIRECTORY'
+	python little_spm.py --convert --directory <sample directory>
              ex) python little_spm.py --convert -d 15819775_T1
 
 파일(.nii)로 작업하는 기능
 - Image Registration (진행중)
 - Brain Smoothing
-	python little_spm.py --smoothing --input 'NIFTI FILE' --fwhm FWHM
+	python little_spm.py --smoothing --input <nifti file> --fwhm <fwhm>
              ex) python little_spm.py --smoothing -i 15819775_T1.nii -f 8
 - Brain Extraction (Only run in Linux)
-	python little_spm.py --extract --input 'NIFTI FILE'
+	python little_spm.py --extract --input <nifti file>
              ex) python little_spm.py --extract -i 15819775_T1.nii
-- Normalization (진행중)
-
+- Normalization
+	python little_spm.py --normalize --input <nifti file>
+	ex) python little_spm.py --normalize -i 15819775_T1.nii
+- Resize
+	python little_spm.py --resize --input <nifti file> -x <x> -y <y> -z <z>
+	ex) python little_spm.py --normalize -i 15819775_T1.nii -x 160 -y 190 -z 224
 
 
 
