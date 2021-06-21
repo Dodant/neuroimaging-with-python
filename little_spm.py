@@ -41,8 +41,12 @@ def convert_dcm_dir_to_nifti(inputDirectory):
     dicom2nifti.dicom_series_to_nifti(inputDirectory, inputDirectory)
     print("Complete", inputDirectory)
 
-def image_registration(input_img, template):
-    os.system(f'python ./voxelmorph/scripts/tf/register.py --moving {input_img} --fixed {template} --moved {input_img}_voxel.nii --model voxelmorph/model/brain_3D.h5')
+def voxel_2d(input_img, template):
+    os.system(f'python ./voxelmorph/scripts/tf/register.py --moving {input_img} --fixed {template} --moved {input_img}_v2.nii --model ./voxelmorph/model/brain_2D_smooth.h5')
+    print("Complete", input_img)
+
+def voxel_3d(input_img, template):
+    os.system(f'python ./voxelmorph/scripts/tf/register.py --moving {input_img} --fixed {template} --moved {input_img}_v3.nii --model ./voxelmorph/model/brain_3D.h5')
     print("Complete", input_img)
     
 def brain_smoothing(input_img, fwhm): 
@@ -86,7 +90,11 @@ if __name__ == "__main__":
                                          '\tpython little_spm.py --convert --directory <sample directory>\n'\
                                          '\tex) python little_spm.py --convert -d 15819775_T1\n\n'\
                                      '3. Image Registration\n'\
-                                         '\tpython little_spm.py --registration --input <nifti file> --template <brain atlas>\n'\
+                                         '\tVoxel 2D'\
+                                         '\tpython little_spm.py --registration --dimension 2 --input <dicom image> --fixed <dicom image>\n'\
+                                         '\tex) python little_spm.py --registration --dimension 2 -i 15819775_T1_12.dcm --fixed fixed_image.dcm\n\n'\
+                                         '\tVoxel 3D'\
+                                         '\tpython little_spm.py --registration --dimension 3 --input <nifti file> --template <brain atlas>\n'\
                                          '\tex) python little_spm.py --registration -i 15819775_T1.nii -t t1\n\n'\
                                      '4. Brain Smoothing\n'\
                                          '\tpython little_spm.py --smoothing --input <nifti file> --fwhm <fwhm>\n'\
@@ -103,7 +111,7 @@ if __name__ == "__main__":
                                     epilog="Written by Dodant",
                                     formatter_class=RawTextHelpFormatter)
 
-    #Rotate - Complete
+    #Rotate
     parser.add_argument('--rotate', 
                         action='store_true',
                         help='Rotate Dicom Series')
@@ -113,14 +121,19 @@ if __name__ == "__main__":
                         type=int, 
                         help='Rotation Angle: Positive Value - ACW / Negative Value - CW')
     
-    #Dicom to Nifti - Complete
+    #Dicom to Nifti
     parser.add_argument('--convert',
                         action='store_true',
                         help='Convert Sample(Dicom Series) to Nifti')
 
-    #Image Registration - Work in Progress
+    #Image Registration
     parser.add_argument('--registration',
                         action='store_true')
+    parser.add_argument('--dimension',
+                        type=int,
+                        choices=[2,3],
+                        default=3)
+    parser.add_argument('--fixed')
     parser.add_argument('-i', '--input',
                         help='Single Nifti File')
     parser.add_argument('-t', '--template', 
@@ -128,19 +141,19 @@ if __name__ == "__main__":
                         choices=['t1','t2','pet','spect'], 
                         default='brain_atlas')
     
-    #Brain Smoothing - Complete
+    #Brain Smoothing
     parser.add_argument('--smoothing',
                         action='store_true')
     parser.add_argument('-f', '--fwhm',
                         help="Full Width Half Max for Brain Smoothing",
                         type=int, default=6)
 
-    #Brain Stripping - Complete
+    #Brain Stripping
     parser.add_argument('--extract',
                         action='store_true',
                         help="Skill Stripping")
 
-    #Normalization - Complete
+    #Normalization
     parser.add_argument('--normalize',
                         action='store_true')
 
@@ -152,7 +165,7 @@ if __name__ == "__main__":
     parser.add_argument('-z', default=224)
 
     #ETC
-    parser.add_argument('-v', '--version', action='version', version='%(prog)s 1.1')
+    parser.add_argument('-v', '--version', action='version', version='%(prog)s 1.2')
     args = parser.parse_args()
 
     if args.rotate: 
@@ -162,13 +175,16 @@ if __name__ == "__main__":
         convert_dcm_dir_to_nifti(args.directory)
         
     if args.registration: 
-        if args.template == 'brain_atlas' or 'pet' or 'spect': 
-            temp = "voxelmorph/templates/mni_icbm152_t1_tal_nlin_sym_09a_nml.nii"
-        elif args.template == 't1':
-            temp = "voxelmorph/templates/mni_icbm152_t1_tal_nlin_sym_09c_nml.nii"
-        elif args.template == 't2':
-            temp = "voxelmorph/templates/mni_icbm152_t2_tal_nlin_sym_09c_nml.nii"
-        image_registration(args.input, temp)
+        if args.dimension == 2: 
+            voxel_2d(args.input, args.fixed)
+        else:
+            if args.template == 'brain_atlas' or 'pet' or 'spect': 
+                temp = "voxelmorph/templates/mni_icbm152_t1_tal_nlin_sym_09a_nml.nii"
+            elif args.template == 't1':
+                temp = "voxelmorph/templates/mni_icbm152_t1_tal_nlin_sym_09c_nml.nii"
+            elif args.template == 't2':
+                temp = "voxelmorph/templates/mni_icbm152_t2_tal_nlin_sym_09c_nml.nii"
+            voxel_3d(args.input, temp)
 
     if args.smoothing: 
         brain_smoothing(args.input, args.fwhm)
