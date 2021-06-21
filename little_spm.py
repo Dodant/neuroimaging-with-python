@@ -42,7 +42,7 @@ def convert_dcm_dir_to_nifti(inputDirectory):
     print("Complete", inputDirectory)
 
 def image_registration(input_img, template):
-    os.system(f'python ./voxelmorph/scripts/tf/register.py --moving {input_img} --fixed {template} --moved {input_img}_voxel.nii --model brain_3D.h5')
+    os.system(f'python ./voxelmorph/scripts/tf/register.py --moving {input_img} --fixed {template} --moved {input_img}_voxel.nii --model voxelmorph/model/brain_3D.h5')
     print("Complete", input_img)
     
 def brain_smoothing(input_img, fwhm): 
