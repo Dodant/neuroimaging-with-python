@@ -7,12 +7,13 @@ import dicom2nifti
 import imutils
 import nibabel as nib
 import nibabel.processing
+from pathlib import Path
 import numpy as np
 import pydicom as dcm
 import SimpleITK as sitk
 from pyrobex.robex import robex
 from scipy.ndimage import zoom
-import os
+
 
 def rotate_dicom_seires(inputDirectory, degOfRotation):
     dcmList = os.listdir(inputDirectory)
@@ -42,42 +43,66 @@ def convert_dcm_dir_to_nifti(inputDirectory):
     print("Complete", inputDirectory)
 
 def voxel_2d(input_img, template):
+    if not os.path.splitext(input_img)[1] == "nii": 
+        print("Input .nii file")
+        exit(0)
     os.system(f'python ./voxelmorph/scripts/tf/register.py --moving {input_img} --fixed {template} --moved {input_img}_v2.nii --model ./voxelmorph/model/brain_2D_smooth.h5')
     print("Complete", input_img)
 
 def voxel_3d(input_img, template):
+    if not os.path.splitext(input_img)[1] == "nii": 
+        print("Input .nii file")
+        exit(0)
     os.system(f'python ./voxelmorph/scripts/tf/register.py --moving {input_img} --fixed {template} --moved {input_img}_v3.nii --model ./voxelmorph/model/brain_3D.h5')
     print("Complete", input_img)
     
 def brain_smoothing(input_img, fwhm): 
-    if not input_img.endswith(".nii"): 
+    if not os.path.splitext(input_img)[1] == "nii": 
         print("Input .nii file")
         exit(0)
     img = nib.load(input_img)
     smoothed_img = nib.processing.smooth_image(img, fwhm)
-    nib.save(smoothed_img, input_img[:input_img.find('.')] + "_smth.nii")
+    nib.save(smoothed_img, Path(input_img).stem + "_smth.nii")
     print("Complete", input_img)
 
 def brain_extraction(input_img):
+    if not os.path.splitext(input_img)[1] == "nii": 
+        print("Input .nii file")
+        exit(0)
     image = nib.load(input_img)
     stripped, mask = robex(image)
-    nib.save(stripped, input_img + '_stripped.nii')
-    nib.save(mask, input_img + '_mask.nii')
+    nib.save(stripped, Path(input_img).stem + '_stripped.nii')
+    nib.save(mask, Path(input_img).stem + '_mask.nii')
     print("Complete", input_img)
 
-def brain_normalization(input_img): 
+def brain_normalization(input_img):
+    if not os.path.splitext(input_img)[1] == "nii": 
+        print("Input .nii file")
+        exit(0)
     input_img_nii = sitk.ReadImage(input_img, sitk.sitkFloat32)
     input_img_nor = sitk.Normalize(input_img_nii)
-    sitk.WriteImage(input_img_nor, input_img[:input_img.find('.')] + "_normal.nii")
+    sitk.WriteImage(input_img_nor, Path(input_img).stem + "_normal.nii")
     print("Complete", input_img)
 
-def brain_resize(input_img, x, y, z): 
-    image_nib = nib.load(input_img)
-    image = image_nib.get_fdata()
-    resized_image = zoom(image, (x/image.shape[0], y/image.shape[1], z/image.shape[2]))
+def brain_resize(input_img, x, y, z):
+    if not os.path.splitext(input_img)[1] == "nii": 
+        print("Input .nii file")
+        exit(0)
+    image_nib = nib.load(input_img).get_fdata()
+    resized_image = zoom(image_nib, (x/image_nib.shape[0], y/image_nib.shape[1], z/image_nib.shape[2]))
     image_nifti = nib.Nifti1Image(resized_image, np.eye(4))
-    nib.save(image_nifti, input_img[:input_img.find('.')] + "_resize.nii")
+    nib.save(image_nifti, Path(input_img).stem + "_resize.nii")
     print("Complete", input_img)
+    
+    
+# def flow(input_img, template): 
+    # input nifti file 
+    
+    # normalization 
+    # resize 
+    # image registration 
+    # smoothing
+
     
     
 if __name__ == "__main__":
