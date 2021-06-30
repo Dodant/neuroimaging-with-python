@@ -41,28 +41,24 @@ python little_spm.py ~~~ 실행
 폴더로 작업하는 기능
 - Dicom to Nifti
 	python little_spm.py --rotate --directory <sample directory> --angle <degree>
-             ex) python little_spm.py --rotate -d 15819775_T1 -a 3
+	ex) python little_spm.py --rotate -d 15819775_T1 -a 3
 
 - Rotate Dicoms
 	python little_spm.py --convert --directory <sample directory>
-             ex) python little_spm.py --convert -d 15819775_T1
+	ex) python little_spm.py --convert -d 15819775_T1
 
 파일로 작업하는 기능
 - Image Registration
-	Voxel 2D - dicom
-	python little_spm.py --registration --dimension 2 --input <dicom image> --fixed <dicom image>
-	ex) python little_spm.py --registration --dimension 2 -i 15819775_T1_12.dcm --fixed fixed_image.dcm
-         	Voxel 3D - nifti
-      	python little_spm.py --registration --dimension 3 --input <nifti file> --template <brain atlas>
-        	ex) python little_spm.py --registration -i 15819775_T1.nii -t t1
+	python little_spm.py --registration --input <dicom image> --template <dicom image>
+	ex) python little_spm.py --registration -i 15819775.nii -t brain_atlas.nii
 
 - Brain Smoothing
 	python little_spm.py --smoothing --input <nifti file> --fwhm <fwhm>
-             ex) python little_spm.py --smoothing -i 15819775_T1.nii -f 8
+	ex) python little_spm.py --smoothing -i 15819775_T1.nii -f 8
 
 - Brain Extraction (Only run in Linux)
 	python little_spm.py --extract --input <nifti file>
-             ex) python little_spm.py --extract -i 15819775_T1.nii
+	ex) python little_spm.py --extract -i 15819775_T1.nii
 
 - Normalization
 	python little_spm.py --normalize --input <nifti file>
