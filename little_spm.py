@@ -48,7 +48,7 @@ def command_iteration(method):
     print(f"{method.GetOptimizerIteration():3} = {method.GetMetricValue():10.5f}")
 
 
-def image_registration(input_img, template): 
+def image_registration(input_img, template, iterations=50): 
     if not os.path.splitext(input_img)[1] == ".nii": 
         print(os.path.splitext(input_img)[1])
         print("Usage:", sys.argv[0], "--registration --input <movingImage> --template <fixedImage>")
@@ -63,7 +63,7 @@ def image_registration(input_img, template):
     R = sitk.ImageRegistrationMethod()
     R.SetMetricAsCorrelation()
     R.SetOptimizerAsLBFGSB(gradientConvergenceTolerance=1e-5,
-                           numberOfIterations=50,
+                           numberOfIterations=iterations,
                            maximumNumberOfCorrections=5,
                            maximumNumberOfFunctionEvaluations=1000,
                            costFunctionConvergenceFactor=1e+7)
@@ -158,7 +158,7 @@ if __name__ == "__main__":
                                          '\tpython little_spm.py --convert --directory <sample directory>\n'\
                                          '\tex) python little_spm.py --convert -d 15819775_T1\n\n'\
                                      '3. Image Registration\n'\
-                                         '\tpython little_spm.py --registration --input <nifti image> --template <nifti image>\n'\
+                                         '\tpython little_spm.py --registration --input <nifti image> --template <nifti image> --iterations <numberOfIterations>\n'\
                                          '\tex) python little_spm.py --registration -i 15819775.nii -t brain_atlas.nii\n\n'\
                                      '4. Brain Smoothing\n'\
                                          '\tpython little_spm.py --smoothing --input <nifti file> --fwhm <fwhm>\n'\
@@ -197,6 +197,9 @@ if __name__ == "__main__":
                         help='Single Nifti File')
     parser.add_argument('-t', '--template', 
                         help='Fixed Brain Template for Registration')
+    parser.add_argument('--iterations',
+                        type=int,
+                        default=50)
     
     #Brain Smoothing
     parser.add_argument('--smoothing',
@@ -232,7 +235,7 @@ if __name__ == "__main__":
         convert_dcm_dir_to_nifti(args.directory)
         
     if args.registration: 
-        image_registration(args.input, args.template)
+        image_registration(args.input, args.template, args.iterations)
 
     if args.smoothing: 
         brain_smoothing(args.input, args.fwhm)

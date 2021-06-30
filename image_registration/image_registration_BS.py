@@ -7,7 +7,7 @@ def command_iteration(method):
 
 
 if len(sys.argv) < 4:
-    print("Usage:", sys.argv[0], "<movingImageFile> <fixedImageFilter> <outputTransformFile>")
+    print("Usage:", sys.argv[0], "<movingImageFile> <fixedImageFilter> <numberOfIterations>")
     sys.exit(1)
 
 fixed = sitk.ReadImage(sys.argv[2], sitk.sitkFloat32)
@@ -19,7 +19,7 @@ tx = sitk.BSplineTransformInitializer(fixed, transformDomainMeshSize)
 R = sitk.ImageRegistrationMethod()
 R.SetMetricAsCorrelation()
 R.SetOptimizerAsLBFGSB(gradientConvergenceTolerance=1e-5,
-                       numberOfIterations=50,
+                       numberOfIterations=int(sys.argv[3]),
                        maximumNumberOfCorrections=5,
                        maximumNumberOfFunctionEvaluations=1000,
                        costFunctionConvergenceFactor=1e+7)
