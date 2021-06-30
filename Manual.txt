@@ -49,7 +49,7 @@ python little_spm.py ~~~ 실행
 
 파일로 작업하는 기능
 - Image Registration
-	python little_spm.py --registration --input <dicom image> --template <dicom image>  --iterations <numberOfIterations>
+	python little_spm.py --registration --input <nifti file> --template <nifti file>  --iterations <numberOfIterations>
 	ex) python little_spm.py --registration -i 15819775.nii -t brain_atlas.nii
 
 - Brain Smoothing
