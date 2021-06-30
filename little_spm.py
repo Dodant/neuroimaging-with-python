@@ -38,23 +38,69 @@ def rotate_dicom_seires(inputDirectory, degOfRotation):
         writer.Execute(filtered_image)
     print(inputDirectory, 'saved successfully')
 
+
 def convert_dcm_dir_to_nifti(inputDirectory): 
     dicom2nifti.dicom_series_to_nifti(inputDirectory, inputDirectory)
     print("Complete", inputDirectory)
 
-def voxel_2d(input_img, template):
-    if not os.path.splitext(input_img)[1] == ".nii": 
-        print("Input .nii file")
-        exit(0)
-    os.system(f'python ./voxelmorph/scripts/tf/register.py --moving {input_img} --fixed {template} --moved {input_img}_v2.nii --model ./voxelmorph/model/brain_2D_smooth.h5')
-    print("Complete", input_img)
 
-def voxel_3d(input_img, template):
+def command_iteration(method):
+    print(f"{method.GetOptimizerIteration():3} = {method.GetMetricValue():10.5f}")
+
+
+def image_registration(input_img, template): 
     if not os.path.splitext(input_img)[1] == ".nii": 
+        print(os.path.splitext(input_img)[1])
         print("Input .nii file")
         exit(0)
-    os.system(f'python ./voxelmorph/scripts/tf/register.py --moving {input_img} --fixed {template} --moved {input_img}_v3.nii --model ./voxelmorph/model/brain_3D.h5')
-    print("Complete", input_img)
+        
+    fixed = sitk.ReadImage(template, sitk.sitkFloat32)
+    moving = sitk.ReadImage(input_img, sitk.sitkFloat32)
+
+    transformDomainMeshSize = [8] * moving.GetDimension()
+    tx = sitk.BSplineTransformInitializer(fixed, transformDomainMeshSize)
+
+    R = sitk.ImageRegistrationMethod()
+    R.SetMetricAsCorrelation()
+
+    R.SetOptimizerAsLBFGSB(gradientConvergenceTolerance=1e-5,
+                           numberOfIterations=100,
+                           maximumNumberOfCorrections=5,
+                           maximumNumberOfFunctionEvaluations=1000,
+                           costFunctionConvergenceFactor=1e+7)
+    R.SetInitialTransform(tx, True)
+    R.SetInterpolator(sitk.sitkLinear)
+
+    R.AddCommand(sitk.sitkIterationEvent, lambda: command_iteration(R))
+
+    outTx = R.Execute(fixed, moving)
+
+    print("-------")
+    print(outTx)
+    print(f"Optimizer stop condition: {R.GetOptimizerStopConditionDescription()}")
+    print(f" Iteration: {R.GetOptimizerIteration()}")
+    print(f" Metric value: {R.GetMetricValue()}")
+
+    sitk.WriteTransform(outTx, sys.argv[3])
+
+    if ("SITK_NOSHOW" not in os.environ):
+        resampler = sitk.ResampleImageFilter()
+        resampler.SetReferenceImage(fixed)
+        resampler.SetInterpolator(sitk.sitkLinear)
+        resampler.SetDefaultPixelValue(100)
+        resampler.SetTransform(outTx)
+
+        out = resampler.Execute(moving)
+        simg1 = sitk.Cast(sitk.RescaleIntensity(fixed), sitk.sitkUInt8)
+        simg2 = sitk.Cast(sitk.RescaleIntensity(out), sitk.sitkUInt8)
+        cimg = sitk.Compose(simg1, simg2, simg1 // 2. + simg2 // 2.)
+        sitk.Show(cimg, "ImageRegistration1 Composition")
+    
+    moving_resampled = sitk.Resample(moving, fixed, outTx, sitk.sitkLinear, 0.0, moving.GetPixelID())
+
+    sitk.WriteImage(moving_resampled, Path(input_img).stem + "_re.nii")
+    sitk.WriteTransform(outTx, Path(input_img).stem + "_tfm.tfm")
+    
     
 def brain_smoothing(input_img, fwhm): 
     if not os.path.splitext(input_img)[1] == ".nii": 
@@ -64,6 +110,7 @@ def brain_smoothing(input_img, fwhm):
     smoothed_img = nib.processing.smooth_image(img, fwhm)
     nib.save(smoothed_img, Path(input_img).stem + "_smth.nii")
     print("Complete", input_img)
+
 
 def brain_extraction(input_img):
     if not os.path.splitext(input_img)[1] == ".nii": 
@@ -75,6 +122,7 @@ def brain_extraction(input_img):
     nib.save(mask, Path(input_img).stem + '_mask.nii')
     print("Complete", input_img)
 
+
 def brain_normalization(input_img):
     if not os.path.splitext(input_img)[1] == ".nii": 
         print("Input .nii file")
@@ -83,6 +131,7 @@ def brain_normalization(input_img):
     input_img_nor = sitk.Normalize(input_img_nii)
     sitk.WriteImage(input_img_nor, Path(input_img).stem + "_normal.nii")
     print("Complete", input_img)
+
 
 def brain_resize(input_img, x, y, z):
     if not os.path.splitext(input_img)[1] == ".nii": 
@@ -96,16 +145,7 @@ def brain_resize(input_img, x, y, z):
     print("Complete", input_img)
     
     
-# def flow(input_img, template): 
-    # input nifti file 
-    
-    # normalization 
-    # resize 
-    # image registration 
-    # smoothing
 
-    
-    
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=
                                      'Little SPM Written in Python\n\n'\
@@ -116,12 +156,8 @@ if __name__ == "__main__":
                                          '\tpython little_spm.py --convert --directory <sample directory>\n'\
                                          '\tex) python little_spm.py --convert -d 15819775_T1\n\n'\
                                      '3. Image Registration\n'\
-                                         '\tVoxel 2D'\
-                                         '\tpython little_spm.py --registration --dimension 2 --input <dicom image> --fixed <dicom image>\n'\
-                                         '\tex) python little_spm.py --registration --dimension 2 -i 15819775_T1_12.dcm --fixed fixed_image.dcm\n\n'\
-                                         '\tVoxel 3D'\
-                                         '\tpython little_spm.py --registration --dimension 3 --input <nifti file> --template <brain atlas>\n'\
-                                         '\tex) python little_spm.py --registration -i 15819775_T1.nii -t t1\n\n'\
+                                         '\tpython little_spm.py --registration --input <dicom image> --template <dicom image>\n'\
+                                         '\tex) python little_spm.py --registration -i 15819775.nii -t brain_atlas.nii\n\n'\
                                      '4. Brain Smoothing\n'\
                                          '\tpython little_spm.py --smoothing --input <nifti file> --fwhm <fwhm>\n'\
                                          '\tex) python little_spm.py --smoothing -i 15819775_T1.nii -f 8\n\n'\
@@ -155,17 +191,10 @@ if __name__ == "__main__":
     #Image Registration
     parser.add_argument('--registration',
                         action='store_true')
-    parser.add_argument('--dimension',
-                        type=int,
-                        choices=[2,3],
-                        default=3)
-    parser.add_argument('--fixed')
     parser.add_argument('-i', '--input',
                         help='Single Nifti File')
     parser.add_argument('-t', '--template', 
-                        help='Fixed Brain Template for Registration',
-                        choices=['t1','t2','pet','spect'], 
-                        default='brain_atlas')
+                        help='Fixed Brain Template for Registration')
     
     #Brain Smoothing
     parser.add_argument('--smoothing',
@@ -201,16 +230,7 @@ if __name__ == "__main__":
         convert_dcm_dir_to_nifti(args.directory)
         
     if args.registration: 
-        if args.dimension == 2: 
-            voxel_2d(args.input, args.fixed)
-        else:
-            if args.template == 'brain_atlas' or 'pet' or 'spect': 
-                temp = "voxelmorph/templates/mni_icbm152_t1_sym_09a.nii"
-            elif args.template == 't1':
-                temp = "voxelmorph/templates/mni_icbm152_t1_sym_09c.nii"
-            elif args.template == 't2':
-                temp = "voxelmorph/templates/mni_icbm152_t2_sym_09c_rss.nii"
-            voxel_3d(args.input, temp)
+        image_registration(args.input, args.template)
 
     if args.smoothing: 
         brain_smoothing(args.input, args.fwhm)
