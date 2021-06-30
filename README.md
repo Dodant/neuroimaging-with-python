@@ -133,7 +133,7 @@ Input Folder
 
 Input Nifti
 - Image Registration   
-	`python little_spm.py --registration --input <dicom image> --template <dicom image>`   
+	`python little_spm.py --registration --input <dicom image> --template <dicom image> --iterations <numberOfIterations>`   
 	`ex) python little_spm.py --registration -i 15819775.nii -t brain_atlas.nii`
 
 - Brain Smoothing   
