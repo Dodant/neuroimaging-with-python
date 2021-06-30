@@ -51,7 +51,7 @@ def command_iteration(method):
 def image_registration(input_img, template): 
     if not os.path.splitext(input_img)[1] == ".nii": 
         print(os.path.splitext(input_img)[1])
-        print("Input .nii file")
+        print("Usage:", sys.argv[0], "--registration --input <movingImage> --template <fixedImage>")
         exit(0)
         
     fixed = sitk.ReadImage(template, sitk.sitkFloat32)
@@ -62,7 +62,6 @@ def image_registration(input_img, template):
 
     R = sitk.ImageRegistrationMethod()
     R.SetMetricAsCorrelation()
-
     R.SetOptimizerAsLBFGSB(gradientConvergenceTolerance=1e-5,
                            numberOfIterations=100,
                            maximumNumberOfCorrections=5,
@@ -70,7 +69,6 @@ def image_registration(input_img, template):
                            costFunctionConvergenceFactor=1e+7)
     R.SetInitialTransform(tx, True)
     R.SetInterpolator(sitk.sitkLinear)
-
     R.AddCommand(sitk.sitkIterationEvent, lambda: command_iteration(R))
 
     outTx = R.Execute(fixed, moving)
@@ -100,11 +98,13 @@ def image_registration(input_img, template):
 
     sitk.WriteImage(moving_resampled, Path(input_img).stem + "_re.nii")
     sitk.WriteTransform(outTx, Path(input_img).stem + "_tfm.tfm")
-    
+    print("Complete", input_img)
+
     
 def brain_smoothing(input_img, fwhm): 
     if not os.path.splitext(input_img)[1] == ".nii": 
-        print("Input .nii file")
+        print(os.path.splitext(input_img)[1])
+        print("Usage:", sys.argv[0], "--smoothing --input <niftiFile>")
         exit(0)
     img = nib.load(input_img)
     smoothed_img = nib.processing.smooth_image(img, fwhm)
@@ -114,7 +114,8 @@ def brain_smoothing(input_img, fwhm):
 
 def brain_extraction(input_img):
     if not os.path.splitext(input_img)[1] == ".nii": 
-        print("Input .nii file")
+        print(os.path.splitext(input_img)[1])
+        print("Usage:", sys.argv[0], "--extract --input <niftiFile>")
         exit(0)
     image = nib.load(input_img)
     stripped, mask = robex(image)
@@ -125,7 +126,8 @@ def brain_extraction(input_img):
 
 def brain_normalization(input_img):
     if not os.path.splitext(input_img)[1] == ".nii": 
-        print("Input .nii file")
+        print(os.path.splitext(input_img)[1])
+        print("Usage:", sys.argv[0], "--normalize --input <niftiFile>")
         exit(0)
     input_img_nii = sitk.ReadImage(input_img, sitk.sitkFloat32)
     input_img_nor = sitk.Normalize(input_img_nii)
@@ -136,7 +138,7 @@ def brain_normalization(input_img):
 def brain_resize(input_img, x, y, z):
     if not os.path.splitext(input_img)[1] == ".nii": 
         print(os.path.splitext(input_img)[1])
-        print("Input .nii file")
+        print("Usage:", sys.argv[0], "--resize --input <niftiFile> -x <x> -y <y> -z <z>")
         exit(0)
     image_nib = nib.load(input_img).get_fdata()
     resized_image = zoom(image_nib, (x/image_nib.shape[0], y/image_nib.shape[1], z/image_nib.shape[2]))
@@ -156,7 +158,7 @@ if __name__ == "__main__":
                                          '\tpython little_spm.py --convert --directory <sample directory>\n'\
                                          '\tex) python little_spm.py --convert -d 15819775_T1\n\n'\
                                      '3. Image Registration\n'\
-                                         '\tpython little_spm.py --registration --input <dicom image> --template <dicom image>\n'\
+                                         '\tpython little_spm.py --registration --input <nifti image> --template <nifti image>\n'\
                                          '\tex) python little_spm.py --registration -i 15819775.nii -t brain_atlas.nii\n\n'\
                                      '4. Brain Smoothing\n'\
                                          '\tpython little_spm.py --smoothing --input <nifti file> --fwhm <fwhm>\n'\
@@ -220,7 +222,7 @@ if __name__ == "__main__":
     parser.add_argument('-z', type=int, default=224)
 
     #ETC
-    parser.add_argument('-v', '--version', action='version', version='%(prog)s 1.2')
+    parser.add_argument('-v', '--version', action='version', version='%(prog)s 1.3')
     args = parser.parse_args()
 
     if args.rotate: 
