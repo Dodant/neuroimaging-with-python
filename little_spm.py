@@ -63,7 +63,7 @@ def image_registration(input_img, template):
     R = sitk.ImageRegistrationMethod()
     R.SetMetricAsCorrelation()
     R.SetOptimizerAsLBFGSB(gradientConvergenceTolerance=1e-5,
-                           numberOfIterations=100,
+                           numberOfIterations=50,
                            maximumNumberOfCorrections=5,
                            maximumNumberOfFunctionEvaluations=1000,
                            costFunctionConvergenceFactor=1e+7)
