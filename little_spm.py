@@ -43,21 +43,21 @@ def convert_dcm_dir_to_nifti(inputDirectory):
     print("Complete", inputDirectory)
 
 def voxel_2d(input_img, template):
-    if not os.path.splitext(input_img)[1] == "nii": 
+    if not os.path.splitext(input_img)[1] == ".nii": 
         print("Input .nii file")
         exit(0)
     os.system(f'python ./voxelmorph/scripts/tf/register.py --moving {input_img} --fixed {template} --moved {input_img}_v2.nii --model ./voxelmorph/model/brain_2D_smooth.h5')
     print("Complete", input_img)
 
 def voxel_3d(input_img, template):
-    if not os.path.splitext(input_img)[1] == "nii": 
+    if not os.path.splitext(input_img)[1] == ".nii": 
         print("Input .nii file")
         exit(0)
     os.system(f'python ./voxelmorph/scripts/tf/register.py --moving {input_img} --fixed {template} --moved {input_img}_v3.nii --model ./voxelmorph/model/brain_3D.h5')
     print("Complete", input_img)
     
 def brain_smoothing(input_img, fwhm): 
-    if not os.path.splitext(input_img)[1] == "nii": 
+    if not os.path.splitext(input_img)[1] == ".nii": 
         print("Input .nii file")
         exit(0)
     img = nib.load(input_img)
@@ -66,7 +66,7 @@ def brain_smoothing(input_img, fwhm):
     print("Complete", input_img)
 
 def brain_extraction(input_img):
-    if not os.path.splitext(input_img)[1] == "nii": 
+    if not os.path.splitext(input_img)[1] == ".nii": 
         print("Input .nii file")
         exit(0)
     image = nib.load(input_img)
@@ -76,7 +76,7 @@ def brain_extraction(input_img):
     print("Complete", input_img)
 
 def brain_normalization(input_img):
-    if not os.path.splitext(input_img)[1] == "nii": 
+    if not os.path.splitext(input_img)[1] == ".nii": 
         print("Input .nii file")
         exit(0)
     input_img_nii = sitk.ReadImage(input_img, sitk.sitkFloat32)
@@ -85,7 +85,8 @@ def brain_normalization(input_img):
     print("Complete", input_img)
 
 def brain_resize(input_img, x, y, z):
-    if not os.path.splitext(input_img)[1] == "nii": 
+    if not os.path.splitext(input_img)[1] == ".nii": 
+        print(os.path.splitext(input_img)[1])
         print("Input .nii file")
         exit(0)
     image_nib = nib.load(input_img).get_fdata()
@@ -132,7 +133,7 @@ if __name__ == "__main__":
                                          '\tex) python little_spm.py --normalize -i 15819775_T1.nii\n\n'\
                                      '7. Resize\n'\
                                          '\tpython little_spm.py --resize --input <nifti file> -x <x> -y <y> -z <z>\n'\
-                                         '\tex) python little_spm.py --normalize -i 15819775_T1.nii -x 160 -y 190 -z 224\n\n',
+                                         '\tex) python little_spm.py --resize -i 15819775_T1.nii -x 160 -y 190 -z 224\n\n',
                                     epilog="Written by Dodant",
                                     formatter_class=RawTextHelpFormatter)
 
@@ -185,9 +186,9 @@ if __name__ == "__main__":
     #Resize 
     parser.add_argument('--resize',
                         action='store_true')
-    parser.add_argument('-x', default=160)
-    parser.add_argument('-y', default=192)
-    parser.add_argument('-z', default=224)
+    parser.add_argument('-x', type=int, default=160)
+    parser.add_argument('-y', type=int, default=192)
+    parser.add_argument('-z', type=int, default=224)
 
     #ETC
     parser.add_argument('-v', '--version', action='version', version='%(prog)s 1.2')
@@ -204,11 +205,11 @@ if __name__ == "__main__":
             voxel_2d(args.input, args.fixed)
         else:
             if args.template == 'brain_atlas' or 'pet' or 'spect': 
-                temp = "voxelmorph/templates/mni_icbm152_t1_tal_nlin_sym_09a_nml.nii"
+                temp = "voxelmorph/templates/mni_icbm152_t1_sym_09a.nii"
             elif args.template == 't1':
-                temp = "voxelmorph/templates/mni_icbm152_t1_tal_nlin_sym_09c_nml.nii"
+                temp = "voxelmorph/templates/mni_icbm152_t1_sym_09c.nii"
             elif args.template == 't2':
-                temp = "voxelmorph/templates/mni_icbm152_t2_tal_nlin_sym_09c_nml.nii"
+                temp = "voxelmorph/templates/mni_icbm152_t2_sym_09c_rss.nii"
             voxel_3d(args.input, temp)
 
     if args.smoothing: 
