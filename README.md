@@ -1,7 +1,7 @@
 ﻿# Neuroimaging with Python
  
 ## Overview
-Make It Possible Fundamental SPM Features in Python
+This project focuses on implementing fundamental Statistical Parametric Mapping (SPM) features in Python for neuroimaging data processing and analysis. By providing a collection of essential tools and techniques, including image registration, smoothing, normalization, and brain extraction, this project aims to make neuroimaging data processing more accessible and efficient for researchers and practitioners in the field. With an easy-to-follow structure and well-documented examples, this project serves as a valuable resource for those interested in exploring the potential of Python in the domain of neuroimaging.
 
 ## Table of Contents
 - [Format](#format)
